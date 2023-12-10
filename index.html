@@ -1,23 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>CodePen - Word search</title>
   <link rel="stylesheet" href="./style.css">
-<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<div id="theGrid" width="100%"></div>
-<!-- partial -->
+  <!-- partial:index.partial.html -->
+  <div id="theGrid" width="100%"></div>
+  <!-- partial -->
   
-<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
-<script  src="./script.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Add an event listener for beforeunload
+      window.addEventListener('beforeunload', function(event) {
+        // Cancel the event
+        event.preventDefault();
+        // Standard-compliant browsers (recent Chrome, Firefox, Safari, etc.)
+        event.returnValue = ''; // For some older browsers
+      });
+      
+      // Your existing code here
+      // Include your script.js file here or import additional scripts if needed
+      $.getScript("./script.js", function(data, textStatus, jqxhr) {
+        console.log("Script loaded successfully");
+      });
+    });
+  </script>
 </body>
 </html>
