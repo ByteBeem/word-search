@@ -5,7 +5,7 @@
 
             options : {
                 wordlist : null,
-                gridsize : 10
+                gridsize : 12
             },
             _mapEventToCell: function(event) {
                 var currentColumn = Math.ceil((event.pageX - this._cellX) / this._cellWidth);
@@ -1229,7 +1229,7 @@ $(document).ready(function() {
       
       $("#theGrid").wordsearchwidget({
         "wordlist" : words,
-        "gridsize" : 20,
+        "gridsize" : 18,
         "width" : 300
       });
     });
