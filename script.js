@@ -1229,12 +1229,18 @@ var GameWidgetHelper = {
 
 
 
-$(document).ready( function () {
-    var words = "cold,gas,radiator,heating,boiler,frozen,energy,power,scarf,home,insulation,warmth";
-        //attach the game to a div
-        $("#theGrid").wordsearchwidget({
-            "wordlist" : words,
-            "gridsize" : 20,
-            "width" : 300});
+$(document).ready(function() {
+    // Connect to the Socket.IO server
+    var socket = io.connect('https://cooperative-south-moose.glitch.me/'); 
 
-});
+    
+    socket.on('gameData', function(data) {
+      var words = data.words; 
+      
+      $("#theGrid").wordsearchwidget({
+        "wordlist" : words,
+        "gridsize" : 20,
+        "width" : 300
+      });
+    });
+  });
