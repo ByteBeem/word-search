@@ -1,85 +1,3 @@
-/*!
- * The Word Search Game Widget
- *
- * Copyright 2011, Ryan Fernandes (https://code.google.com/u/@VBFTRFJWDxFDXgJ4/)
- * Licensed under The MIT License.
- * see license.txt
- *
- */
-
-//==============================================================================
-//------------------------------------------------------------------------------  
-//The Word Search Game Widget
-//------------------------------------------------------------------------------  
-//  
-//  ------
-//  Usage:
-//  ------
-//      $(document).ready( function () {
-//      var words = "earth,mars,mercury,neptune,pluto,saturn,jupiter,one,two,
-//              three,four,five,six,seven,eight,mozart,bach,meyer,rose,mahler";
-//      $("#theGrid").wordsearchwidget({"wordlist" : words,"gridsize" : 12});
-//  });
-//  
-//  -------
-//  Inputs: 
-//  -------
-//  gridsize - Size of grid to generate (this will be a square)
-//  wordlist - Comma separated list of words to place on the grid
-//  
-//  -------------
-//  What it does:               
-//  -------------
-//  Creates a grid of letters with words from the wordlist
-//  These words are randomly placed in the following directions
-//  1. Horizontal
-//  2. Vertical
-//  3. Left-Diagonal
-//  4. Right-Diagonal
-//  In addition, the letters are placed in forward or reverse order, randomly
-//  Provision is made to overlap words
-//  
-//  The User is expected to click on a letter and drag to the last letter of the 
-//  word. If the selected letters form a word that is in the word list the UI
-//  will indicate that by crossing it out from the wordlist
-//  
-//  If the user cannot find a word, she has to click on that word in the 
-//  wordlist and the UI will hightlight the word in the grid and cross it out
-//  
-//  ------------------
-//  Technical Details:
-//  ------------------ 
-//  
-//      Contains 3 areas: 
-//          a) main game grid (#rf-searchgamecontainer)
-//          b) list of words to be found (#rf-wordcontainer)
-//          c) list of words that have been found (#rf-foundwordcontainer)
-//      
-//      Data Structures used:
-//      ---------------------
-//          Objects related to the Data Model
-//          0) Model
-//              a) Grid
-//                  1) Cell
-//                  2) HorizontalPopulator
-//                  3) VerticalPopulator
-//                  4) LeftDiagonalPopulator
-//                  5) RightDiagonalPopulator
-//                  
-//              b) WordList
-//                  1) Word
-//          
-//          Objects related to View
-//          1) Root
-//          2) Hotzone
-//          3) Arms
-//          4) Visualizer
-//          
-//          Objects related to the controller
-//          1) GameWidgetHelper         
-//          
-//          
-//==============================================================================
 
 (function( $, undefined ) {
     
@@ -211,13 +129,7 @@ $.extend($.ryanf.wordsearchwidget, {
     version: "0.0.1"
 });
 
-//------------------------------------------------------------------------------
-// VIEW OBJECTS 
-//------------------------------------------------------------------------------
-/*
- * The Arms represent the cells that are selectable once the hotzone has been 
- * exited/passed
- */
+
 function Arms() {
     this.arms = null;
 
@@ -1312,16 +1224,6 @@ var GameWidgetHelper = {
 })(jQuery);
 
 
-/*
- * jQuery UI Touch Punch 0.2.2
- *
- * Copyright 2011, Dave Furfero
- * Dual licensed under the MIT or GPL Version 2 licenses.
- *
- * Depends:
- *  jquery.ui.widget.js
- *  jquery.ui.mouse.js
- */
 (function(b){b.support.touch="ontouchend" in document;if(!b.support.touch){return;}var c=b.ui.mouse.prototype,e=c._mouseInit,a;function d(g,h){if(g.originalEvent.touches.length>1){return;}g.preventDefault();var i=g.originalEvent.changedTouches[0],f=document.createEvent("MouseEvents");f.initMouseEvent(h,true,true,window,1,i.screenX,i.screenY,i.clientX,i.clientY,false,false,false,false,0,null);g.target.dispatchEvent(f);}c._touchStart=function(g){var f=this;if(a||!f._mouseCapture(g.originalEvent.changedTouches[0])){return;}a=true;f._touchMoved=false;d(g,"mouseover");d(g,"mousemove");d(g,"mousedown");};c._touchMove=function(f){if(!a){return;}this._touchMoved=true;d(f,"mousemove");};c._touchEnd=function(f){if(!a){return;}d(f,"mouseup");d(f,"mouseout");if(!this._touchMoved){d(f,"click");}a=false;};c._mouseInit=function(){var f=this;f.element.bind("touchstart",b.proxy(f,"_touchStart")).bind("touchmove",b.proxy(f,"_touchMove")).bind("touchend",b.proxy(f,"_touchEnd"));e.call(f);};})(jQuery);
 
 
@@ -1332,7 +1234,7 @@ $(document).ready( function () {
         //attach the game to a div
         $("#theGrid").wordsearchwidget({
             "wordlist" : words,
-            "gridsize" : 12,
+            "gridsize" : 20,
             "width" : 300});
 
 });
