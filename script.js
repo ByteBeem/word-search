@@ -1151,14 +1151,6 @@ var Util = {
     }
 } 
 
-
-//------------------------------------------------------------------------------
-// OBJECTS RELATED TO THE CONTROLLER
-//------------------------------------------------------------------------------
-/*
- * Main controller that interacts with the Models and View Helpers to render and
- * control the game
- */
 var GameWidgetHelper = {
     prepGrid : function (size, words) {
         var grid = new Grid();
@@ -1229,20 +1221,12 @@ var GameWidgetHelper = {
 
 
 
-$(document).ready(function() {
-    // Connect to the Socket.IO server
-    var socket = io.connect('https://cooperative-south-moose.glitch.me/'); 
+$(document).ready( function () {
+    var words = "cold,gas,radiator,heating,boiler,frozen,energy,power,scarf,home,insulation,warmth";
+        //attach the game to a div
+        $("#theGrid").wordsearchwidget({
+            "wordlist" : words,
+            "gridsize" : 20,
+            "width" : 300});
 
-    
-    socket.on('gameData', function(data) {
-      var words = data.words; 
-
-      console.log(words);
-      
-      $("#theGrid").wordsearchwidget({
-        "wordlist" : words,
-        "gridsize" : 20,
-        "width" : 300
-      });
-    });
-  });
+});
