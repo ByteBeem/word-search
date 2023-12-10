@@ -112,6 +112,8 @@
                             Visualizer.select(this);
                             $.data(this,"selected", "true");
 
+                            socket.emit('selectedWord', { word: selectedword });
+
                     });
                     GameWidgetHelper.signalWordFound(wordIndex);
                 }
