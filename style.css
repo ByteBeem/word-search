@@ -70,13 +70,13 @@
 @media screen and (max-width: 1000px) {
     #rf-searchgamecontainer,
     #rf-wordcontainer {
-        padding-right: 1rem;
+        padding: 1rem;
     }
 }
 
 @media screen and (max-width: 700px) {
     #rf-searchgamecontainer,
     #rf-wordcontainer {
-        padding-right: 10px;
+        padding: 1rem;
     }
 }
