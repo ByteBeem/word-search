@@ -1,75 +1,82 @@
 /* Style for grid cells */
-            .rf-tgrid {
-                
-                font-family: Arial;
-                font-weight: normal;
-                font-size: 14px;
-                margin: 1px;
-                padding: 8px;
-            /*    border: 1px solid bisque;*/
-                vertical-align: middle;
-                text-align: center;
+.rf-tgrid {
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    margin: 1px;
+    padding: 8px;
+    vertical-align: middle;
+    text-align: center;
+}
 
-            }
+/* Style for the grid */
+.rf-tablestyle {
+    border: 2px solid black;
+    background-color: #eee;
+    cursor: pointer;
+}
 
-            /* Style for the grid */
-            .rf-tablestyle {
-                border: 2px solid;
-                border-color: black;
-                background-color: #eee;
-                cursor: pointer;
+/* Style for the div containing the grid */
+#rf-searchgamecontainer {
+    float: left;
+    padding-right: 1rem;
+}
 
-            }
+/* Style for the div containing the word list */
+#rf-wordcontainer {
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    float: left;
+    padding-right: 0.5rem;
+    cursor: default;
+    margin: 1em 1em 1em 0;
+    width: 200px;
+    border: 2px solid black;
+    background-color: #eee;
+    cursor: pointer;
+}
 
-            /* Style for the div containing the grid */
-            #rf-searchgamecontainer {
-                float: left;
-                padding-right: 50px; 
-            }
+/* Style for the words that have been found */
+.rf-foundword {
+    font-family: Arial, sans-serif;
+    text-decoration: line-through;
+    color: darkslategray;
+}
 
-            /* Style for the div containing the word list */
-            #rf-wordcontainer {
-                font-family: Arial,sans-serif;
-                font-weight: normal;
-                font-size: 14px;
-                float :left;
-                padding-right: 10px; 
-                cursor: default;
-                margin : 1em 1em 1em 0;
-                width : 200px;  
-                border: 2px solid;
-                border-color: black;
-                background-color: #eee;
-                cursor: pointer;    
-            }
+#rf-tablegrid .rf-armed {
+    /* background: lightcyan; */
+}
 
-            /* Style for the words that have been found */
-            .rf-foundword {
-                font-family: Arial,sans-serif;
-                text-decoration : line-through;
-                color : darkslategray;                
-            }
+#rf-tablegrid .rf-highlight {
+    background: red;
+}
 
-            #rf-tablegrid .rf-armed {
-            /*  background: lightcyan;*/
-            }
+#rf-tablegrid .rf-glowing {
+    background: gold;
+}
 
-            #rf-tablegrid .rf-highlight {
-                background: red;
-            }
+#rf-tablegrid .rf-selected {
+    background: #00ffff;
+}
 
+/* Style for words that didn't make it on the grid */
+.rf-pfalse {
+    color: #111;
+    visibility: hidden;
+}
 
-            #rf-tablegrid .rf-glowing {
-                background: gold;
-                    
-            }
+/* Mobile responsiveness */
+@media screen and (max-width: 1000px) {
+    #rf-searchgamecontainer,
+    #rf-wordcontainer {
+        padding-right: 1rem;
+    }
+}
 
-            #rf-tablegrid .rf-selected {
-                background: #00ffff;
-            }
-
-            /* style for words that didn't make it on the grid */
-            .rf-pfalse {
-                color: #111;
-                visibility: hidden; 
-            }
+@media screen and (max-width: 700px) {
+    #rf-searchgamecontainer,
+    #rf-wordcontainer {
+        padding-right: 10px;
+    }
+}
