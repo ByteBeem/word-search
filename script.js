@@ -1222,38 +1222,7 @@ var GameWidgetHelper = {
 
 var socket = io.connect('https://cooperative-south-moose.glitch.me/');
 
-// Client-side code
-$(document).ready(function () {
-    var socket = io.connect('https://cooperative-south-moose.glitch.me/');
 
-    function updateCountdown(timeRemaining) {
-        if (timeRemaining >= 0) {
-          // Your existing countdown update logic
-          var hours = pad(parseInt(timeRemaining / 3600));
-          var minutes = pad(parseInt((timeRemaining % 3600) / 60));
-          var seconds = pad(parseInt(timeRemaining % 60));
-    
-          $('#tiles').html(
-            "<span>" + hours + ':</span><span>' + minutes + ':</span><span>' + seconds + '</span>'
-          );
-    
-          // Adjust the colors based on the remaining time if needed
-        } else {
-          $('#tiles').html('Timer Stopped');
-        }
-      }
-    
-      function pad(n) {
-        return (n < 10 ? '0' : '') + n;
-      }
-  
-    socket.on('timeUpdate', function (timeRemaining) {
-      updateCountdown(timeRemaining);
-    });
-  
-   
-    });
-  
 
 $(document).ready(function() {
     socket.on('gameData', function(data) {
