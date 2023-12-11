@@ -163,3 +163,12 @@ text-shadow: 1px 1px 0px #ccc;
 	text-transform: uppercase;
 	display: inline-block;
 }
+
+#game-over-message {
+  display: none;
+  text-align: center;
+  font-size: 24px;
+  border-radius: 10px;
+  z-index: 1000;
+  padding: 20px;
+}
