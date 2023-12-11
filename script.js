@@ -1224,7 +1224,7 @@ var socket = io.connect('https://cooperative-south-moose.glitch.me/');
 
 // Client-side code
 $(document).ready(function () {
-    
+    var socket = io.connect('https://cooperative-south-moose.glitch.me/');
   
     socket.on('timeUpdate', function (timeRemaining) {
       updateCountdown(timeRemaining);
