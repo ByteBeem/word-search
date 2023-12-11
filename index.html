@@ -110,6 +110,8 @@ socket.on('gameOver', () => {
 
   function showGameOverMessage() {
     var gameOverMessage = document.getElementById("game-over-message");
+    var grid = document.getElementById("theGrid");
+    grid.style.display = "none";
     gameOverMessage.style.display = "block";
   }
   </script>
