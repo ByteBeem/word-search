@@ -9,9 +9,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 <body>
-  <!-- partial:index.partial.html -->
-  <div id="theGrid" width="100%"></div>
-  <!-- partial -->
 
   <input type="hidden" id="set-time" value="3"/>
 <div id="countdown">
@@ -19,6 +16,11 @@
   <div id='tiles' class="color-full"></div>
   <div id ="left" class="countdown-label">Time Remaining</div>
 </div>
+  <!-- partial:index.partial.html -->
+  <div id="theGrid" width="100%"></div>
+  <!-- partial -->
+
+  
   
   <script>
     $(document).ready(function() {
