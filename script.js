@@ -1228,7 +1228,7 @@ $(document).ready(function() {
     socket.on('gameData', function(data) {
       var words = data.words;
 
-      console.log("words", words);
+     
       
       $("#theGrid").wordsearchwidget({
         "wordlist" : words,

@@ -39,8 +39,9 @@
         console.log("Script loaded successfully");
       });
     });
-
-    var minutes = $( '#set-time' ).val();
+    socket.on('Time', function(data) {
+      var minutes = data.Time;
+   // var minutes = $( '#set-time' ).val();
 
 var target_date = new Date().getTime() + ((minutes * 60 ) * 1000); // set the countdown date
 var time_limit = ((minutes * 60 ) * 1000);
@@ -97,7 +98,7 @@ if ( seconds_left >= 0 ) {
 function pad(n) {
 	return (n < 10 ? '0' : '') + n;
 }
-
+});
   </script>
 </body>
 </html>
