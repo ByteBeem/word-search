@@ -23,6 +23,13 @@
   <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: red; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Return to Dashboard</a>
 
 </div>
+
+<div id="game-win-message">
+  <h1>Congratulations you won!!</h1>
+  <p>Thanks for playing!</p>
+  <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: green; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Claim Your winnings</a>
+
+</div>
  
   <div id="theGrid" width="100%"></div>
 
@@ -109,12 +116,27 @@ socket.on('gameOver', () => {
     socket.emit('disconnectGame');
   });
 
+  socket.on('win', () => {
+    showWinMessage();
+
+    // Emit a disconnect event when the game is over
+    socket.emit('disconnectGame');
+  });
+
   function showGameOverMessage() {
     var gameOverMessage = document.getElementById("game-over-message");
     var grid = document.getElementById("theGrid");
     grid.style.display = "none";
     gameOverMessage.style.display = "block";
   }
+
+  function showWinMessage() {
+    var winMessage = document.getElementById("game-win-message");
+    var grid = document.getElementById("theGrid");
+    grid.style.display = "none";
+    winMessage.style.display = "block";
+  }
+
   </script>
 </body>
 </html>
