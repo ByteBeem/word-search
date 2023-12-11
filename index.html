@@ -41,6 +41,7 @@
     });
     socket.on('Time', function(data) {
       var minutes = data.Time;
+      console.log('min',minutes);
    // var minutes = $( '#set-time' ).val();
 
 var target_date = new Date().getTime() + ((minutes * 60 ) * 1000); // set the countdown date
