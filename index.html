@@ -17,24 +17,25 @@
   <div id ="left" class="countdown-label">Time Remaining</div>
 </div>
 
-  <!-- partial:index.partial.html -->
+<div id="game-over-message">
+  <h1>Game Over</h1>
+  <p>Thanks for playing!</p>
+  <a href="https://spinz-three.vercel.app/dashboard" class="btn btn-primary">Return to Dashboard</a>
+</div>
+ 
   <div id="theGrid" width="100%"></div>
-  <!-- partial -->
 
-  
   
   <script>
     $(document).ready(function() {
-      // Add an event listener for beforeunload
+      
       window.addEventListener('beforeunload', function(event) {
-        // Cancel the event
+       
         event.preventDefault();
-        // Standard-compliant browsers (recent Chrome, Firefox, Safari, etc.)
-        event.returnValue = ''; // For some older browsers
+
+        event.returnValue = '';
       });
       
-      // Your existing code here
-      // Include your script.js file here or import additional scripts if needed
       $.getScript("./script.js", function(data, textStatus, jqxhr) {
         console.log("Script loaded successfully");
       });
@@ -43,20 +44,20 @@
     socket.on('Time', function(data) {
       var minutes = data.Time;
       console.log('min',minutes);
-   // var minutes = $( '#set-time' ).val();
+   
 
-var target_date = new Date().getTime() + ((minutes * 60 ) * 1000); // set the countdown date
+var target_date = new Date().getTime() + ((minutes * 60 ) * 1000);
 var time_limit = ((minutes * 60 ) * 1000);
-//set actual timer
+
 setTimeout(
   function() 
   {
     document.getElementById("left").innerHTML = "Timer Stopped";
   }, time_limit );
 
-var days, hours, minutes, seconds; // variables for time units
+var days, hours, minutes, seconds; 
 
-var countdown = document.getElementById("tiles"); // get tag element
+var countdown = document.getElementById("tiles");
 
 getCountdown();
 
@@ -65,7 +66,6 @@ setInterval(function () { getCountdown(); }, 1000);
 
 function getCountdown(){
 
-	// find the amount of "seconds" between now and target
 	var current_date = new Date().getTime();
 	var seconds_left = (target_date - current_date) / 1000;
   
@@ -90,7 +90,6 @@ if ( seconds_left >= 0 ) {
 	minutes = pad( parseInt(seconds_left / 60) );
 	seconds = pad( parseInt( seconds_left % 60 ) );
 
-	// format countdown string + set tag value
 	countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>"; 
   
 }
@@ -101,6 +100,18 @@ function pad(n) {
 	return (n < 10 ? '0' : '') + n;
 }
 });
+
+socket.on('gameOver', () => {
+    showGameOverMessage();
+
+    // Emit a disconnect event when the game is over
+    socket.emit('disconnectGame');
+  });
+
+  function showGameOverMessage() {
+    var gameOverMessage = document.getElementById("game-over-message");
+    gameOverMessage.style.display = "block";
+  }
   </script>
 </body>
 </html>

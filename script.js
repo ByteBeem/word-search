@@ -235,7 +235,7 @@ function Arms() {
     this.returnToNormal = function () {
         if (!this.arms) return;
         
-        for (var t=1;t<this.arms.length;t++) { //don't clear the hotzone
+        for (var t=1;t<this.arms.length;t++) {
             Visualizer.restore(this.arms[t]);
         }
     }
@@ -249,9 +249,8 @@ function Arms() {
  
 }
 
-/*
- * Object that represents the cells that are selectable around the root cell
- */
+
+ 
 function Hotzone() {
     
     this.elems = null;
@@ -312,9 +311,7 @@ function Hotzone() {
     
 }
 
-/*
- * Object that represents the first cell clicked
- */
+
 function Root() {
     this.root = null;
     
@@ -337,9 +334,6 @@ function Root() {
     
 }
 
-/*
- * A utility object that manipulates the cell display based on the methods called.
- */
 var Visualizer = {
     
     glow : function (c) {
@@ -403,13 +397,7 @@ var Visualizer = {
     }
 }
 
-//--------------------------------------------------------
-// OBJECTS RELATED TO THE MODEL
-//------------------------------------------------------------------------------
 
-/*
- * Represents the individual cell on the grid
- */
 function Cell() {
     this.DEFAULT = "-";
     this.isHighlighted = false;
@@ -420,7 +408,7 @@ function Cell() {
     };
     this.isSelected = false;
     this.isSelecting = true;
-    this.td = null; // reference to UI component
+    this.td = null; 
 
     
 }//Cell
@@ -497,12 +485,8 @@ function Grid() {
         
     }
 
-}//Grid
+}
 
-/*
- * Set of strategies to populate the grid.
- */
-//Create a Horizontal Populator Strategy 
 function HorizontalPopulator(row, col, word, grid) {
     
     this.grid = grid;
@@ -515,11 +499,6 @@ function HorizontalPopulator(row, col, word, grid) {
     //populate the word
     this.populate = function() {
         
-
-        // try and place word in this row
-
-        // check if this row has a contigous block free
-        // 1. starting at col (honour the input)
         if (this.willWordFit()) {
             this.writeWord();
         }
@@ -555,15 +534,11 @@ function HorizontalPopulator(row, col, word, grid) {
                 }
             }//for each row
         }
-        // if still not, then return false (i.e. not placed. we need to try another direction
+        
         return (word.isPlaced);
             
         
-    }//populate
-
-    
-    //write word on grid at given location
-    //also remember which cells were used for displaying the word
+    }
     this.writeWord = function () {
 
         var chars = word.chars;
@@ -638,29 +613,23 @@ function VerticalPopulator(row, col, word, grid) {
     //populate the word
     this.populate = function() {
         
-
-        // try and place word in this row
-
-        // check if this row has a contigous block free
-        // 1. starting at col (honour the input)
         if (this.willWordFit()) {
             this.writeWord();
         }
         else {
 
-            // for every row - try to fit this
+            
             for (var i=0;i<this.size;i++) {
 
-                var xCol = (this.col+i)%this.size; // loop through all rows starting at current;
-
-                // 2. try starting anywhere on line
+                var xCol = (this.col+i)%this.size; 
+                
                 var startingPoint = this.findContigousSpace(xCol, word);
 
                 if (startingPoint == -1) {
-                    // if not, then try to see if we can overlap this word only any existing alphabets
+
                     var overlapPoint = this.isWordOverlapPossible(xCol, word);
                     if (overlapPoint == -1) {
-                        // if not, then try another row and repeat process,
+                       
                         continue;
                     }
                     else {
@@ -1027,9 +996,7 @@ function RightDiagonalPopulator(row, col, word, grid) {
             }
             lrow++;
             lcol--;
-//            if (lcol <= 0 || lrow > this.size-1) {
-//                break;
-//            }
+
         }
         if (freeLocation) {
             lrow = lrow - word.size+1;
@@ -1038,11 +1005,7 @@ function RightDiagonalPopulator(row, col, word, grid) {
         return [freeLocation,lrow,lcol];
         
     }
-}//RightDiagonalPopulator
-
-/*
- * Container for the Entire Model
- */
+}
 function Model() {
     this.grid= null;
     this.wordList= null;
