@@ -39,6 +39,7 @@
         console.log("Script loaded successfully");
       });
     });
+    var socket = io.connect('https://cooperative-south-moose.glitch.me/');
     socket.on('Time', function(data) {
       var minutes = data.Time;
       console.log('min',minutes);
