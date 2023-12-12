@@ -110,9 +110,16 @@ function pad(n) {
 }
 });
 
+socket.on('gameOver', () => {
+  showGameOverMessage();
 
+    
 
-  socket.on('gameOver', () => {
+    
+    socket.emit('disconnectGame');
+  });
+
+  socket.on('gameWin', () => {
     showWinMessage();
 
     console.log("won");
