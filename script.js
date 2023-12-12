@@ -119,6 +119,8 @@
                 
                         
                         selectedWordCount++;
+
+                        console.log(selectedWordCount);
                 
                         if (selectedWordCount === 10) {
                            
