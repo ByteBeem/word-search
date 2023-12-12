@@ -52,6 +52,7 @@
     socket.on('Time', function(data) {
       var minutes = data.Time;
       console.log('min',minutes);
+      console.log("start");
    
 
 var target_date = new Date().getTime() + ((minutes * 60 ) * 1000);
@@ -119,9 +120,9 @@ socket.on('gameOver', () => {
   socket.on('gameWin', () => {
     showWinMessage();
 
-    console.log("won")
+    console.log("won");
 
-    // Emit a disconnect event when the game is over
+    
     socket.emit('disconnectGame');
   });
 
