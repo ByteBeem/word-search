@@ -119,6 +119,8 @@ socket.on('gameOver', () => {
   socket.on('gameWin', () => {
     showWinMessage();
 
+    console.log("won")
+
     // Emit a disconnect event when the game is over
     socket.emit('disconnectGame');
   });
