@@ -107,7 +107,8 @@
                 });
 
                 var wordIndex = this.model.wordList.isWordPresent(selectedword)
-                var selectedWordCount = 0;  
+
+                const selectedWordCount = 0;  
 
                 if (wordIndex !== -1) {
                     $('.rf-glowing, .rf-highlight', this.element[0]).each(function() {
