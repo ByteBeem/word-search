@@ -1196,7 +1196,7 @@ $(document).ready(function() {
       
       $("#theGrid").wordsearchwidget({
         "wordlist" : words,
-        "gridsize" : 10,
+        "gridsize" : 20,
         "width" : 300
       });
     });
