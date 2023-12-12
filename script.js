@@ -108,9 +108,11 @@
 
                 var wordIndex = this.model.wordList.isWordPresent(selectedword)
 
-                var selectedWordCount = 0;  
+                
 
                 if (wordIndex !== -1) {
+                    var selectedWordCount = 0;  
+                    
                     $('.rf-glowing, .rf-highlight', this.element[0]).each(function() {
                         Visualizer.select(this);
                         $.data(this, "selected", "true");
