@@ -107,33 +107,17 @@
                 });
 
                 var wordIndex = this.model.wordList.isWordPresent(selectedword)
-
-                
-
-                if (wordIndex !== -1) {
-                    var selectedWordCount = 0;  
-                    
+                if (wordIndex!=-1) {
                     $('.rf-glowing, .rf-highlight', this.element[0]).each(function() {
-                        Visualizer.select(this);
-                        $.data(this, "selected", "true");
-                
-                        
-                        socket.emit('selectedWord', { word: selectedword });
-                
-                        
-                        selectedWordCount+=1;
+                            Visualizer.select(this);
+                            $.data(this,"selected", "true");
 
-                        console.log(selectedWordCount);
-                
-                        if (selectedWordCount === 10) {
-                           
+                            socket.emit('selectedWord', { word: selectedword });
                             socket.emit('win');
-                        }
+
                     });
-                
                     GameWidgetHelper.signalWordFound(wordIndex);
                 }
-                
 
                 this.hotzone.returnToNormal();
                 this.startedAt.returnToNormal();
