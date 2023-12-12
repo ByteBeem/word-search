@@ -110,12 +110,7 @@ function pad(n) {
 }
 });
 
-socket.on('gameOver', () => {
-    showGameOverMessage();
 
-    // Emit a disconnect event when the game is over
-    socket.emit('disconnectGame');
-  });
 
   socket.on('gameOver', () => {
     showWinMessage();
