@@ -108,7 +108,7 @@
 
                 var wordIndex = this.model.wordList.isWordPresent(selectedword)
 
-                const selectedWordCount = 0;  
+                var selectedWordCount = 0;  
 
                 if (wordIndex !== -1) {
                     $('.rf-glowing, .rf-highlight', this.element[0]).each(function() {
@@ -119,7 +119,7 @@
                         socket.emit('selectedWord', { word: selectedword });
                 
                         
-                        selectedWordCount++;
+                        selectedWordCount+=1;
 
                         console.log(selectedWordCount);
                 
