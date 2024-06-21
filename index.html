@@ -48,26 +48,19 @@
        
       });
     });
+    
     const socket = new WebSocket('ws://localhost:3002');
+
+
     socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
         
-        if (data && data.type === 'timeUpdate') {
-            var timeRemaining = data.timeRemaining;
+        if (data && data.type === 'timeUpdate' && data.timeRemaining && typeof data.timeRemaining.minutes === 'number' && typeof data.timeRemaining.seconds === 'number') {
+            var minutes = data.timeRemaining.minutes;
+            var seconds = data.timeRemaining.seconds;
 
-            var target_date = new Date().getTime() + (timeRemaining * 1000);
-            var time_limit = timeRemaining * 1000;
-
-            setTimeout(function() {
-                document.getElementById("left").innerHTML = "Timer Stopped";
-            }, time_limit);
-
-            var countdown = document.getElementById("tiles");
-
-            setInterval(function() {
-                getCountdown(target_date, time_limit, countdown);
-            }, 1000);
+            displayCountdown(minutes, seconds);
         } else {
             console.error('Received unexpected data format:', event.data);
         }
@@ -76,28 +69,18 @@
     }
 };
 
-function getCountdown(target_date, time_limit, countdown) {
-    var current_date = new Date().getTime();
-    var seconds_left = (target_date - current_date) / 1000;
+function displayCountdown(minutes, seconds) {
+    var countdown = document.getElementById("tiles");
 
-    if (seconds_left >= 0) {
-        if ((seconds_left * 1000) < (time_limit / 2)) {
-            $('#tiles').removeClass('color-full').addClass('color-half');
-        } else if ((seconds_left * 1000) < (time_limit / 4)) {
-            $('#tiles').removeClass('color-half').addClass('color-empty');
-        }
+    countdown.innerHTML = formatTime(minutes, seconds);
 
-        var days = pad(parseInt(seconds_left / 86400));
-        seconds_left = seconds_left % 86400;
+    // Optionally, handle timer stop logic if needed
+}
 
-        var hours = pad(parseInt(seconds_left / 3600));
-        seconds_left = seconds_left % 3600;
-
-        var minutes = pad(parseInt(seconds_left / 60));
-        var seconds = pad(parseInt(seconds_left % 60));
-
-        countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
-    }
+function formatTime(minutes, seconds) {
+    var formattedMinutes = pad(minutes);
+    var formattedSeconds = pad(seconds);
+    return "<span>" + formattedMinutes + ":</span><span>" + formattedSeconds + "</span>";
 }
 
 function pad(n) {
