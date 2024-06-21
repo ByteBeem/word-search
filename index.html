@@ -58,7 +58,7 @@
         console.log(data);
         
         if (data.type === 'timeUpdate' ) {
-          
+            var hours = data.timeRemaining.hours;
             var minutes = data.timeRemaining.minutes;
             var seconds = data.timeRemaining.seconds;
 
