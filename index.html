@@ -52,8 +52,8 @@
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
-    if (data.type === 'Time') {
-        var minutes = data.Time;
+    if (data && data.type === 'timeUpdate') {
+        var minutes = data.timeRemaining;
 
         var target_date = new Date().getTime() + (minutes * 60 * 1000);
         var time_limit = minutes * 60 * 1000;
