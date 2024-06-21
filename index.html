@@ -48,7 +48,7 @@
        
       });
     });
-    
+
     const socket = new WebSocket('ws://localhost:3002');
 
 
@@ -56,7 +56,7 @@
     try {
         const data = JSON.parse(event.data);
         
-        if (data && data.type === 'timeUpdate' && data.timeRemaining && typeof data.timeRemaining.minutes === 'number' && typeof data.timeRemaining.seconds === 'number') {
+        if (data && data.type === 'timeUpdate' ) {
             var minutes = data.timeRemaining.minutes;
             var seconds = data.timeRemaining.seconds;
 
