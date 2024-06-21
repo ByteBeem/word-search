@@ -101,10 +101,10 @@ function pad(n) {
 
 
 
-socket.on('gameOver', () => {
+socket.onmessage('gameOver', () => {
   showGameOverMessage();
 
-    socket.emit('disconnectGame');
+    socket.onclose();
   });
 
  
@@ -116,10 +116,10 @@ socket.on('gameOver', () => {
     gameOverMessage.style.display = "block";
   }
 
-  socket.on('Win', () => {
+  socket.onmessage('Win', () => {
   console.log("Received gameWin event. Showing win message.");
   showWinMessage();
-  socket.emit('disconnectGame');
+  socket.onclose();
 });
 
   function showWinMessage() {
