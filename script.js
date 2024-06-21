@@ -1191,7 +1191,7 @@ $(document).ready(function() {
     socket.onmessage= function(event) {
         const data = JSON.parse(event.data);
         if(data.Type === "gameData"){
-         var words = data.words;
+         var words = data.words.split(',');
          console.log(words)
 
       $("#theGrid").wordsearchwidget({
