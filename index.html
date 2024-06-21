@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Spinz - Word search</title>
+  <title>Play929 - Word search</title>
   <link rel="stylesheet" href="./style.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -48,66 +48,58 @@
        
       });
     });
-    var socket = io.connect('https://wheel-servers-7482b31984eb.herokuapp.com/');
-    socket.on('Time', function(data) {
-      var minutes = data.Time;
-      
-   
+    const socket = new WebSocket('ws://localhost:3002');
 
-var target_date = new Date().getTime() + ((minutes * 60 ) * 1000);
-var time_limit = ((minutes * 60 ) * 1000);
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    if (data.type === 'Time') {
+        var minutes = data.Time;
 
-setTimeout(
-  function() 
-  {
-    document.getElementById("left").innerHTML = "Timer Stopped";
-  }, time_limit );
+        var target_date = new Date().getTime() + (minutes * 60 * 1000);
+        var time_limit = minutes * 60 * 1000;
 
-var days, hours, minutes, seconds; 
+        setTimeout(function() {
+            document.getElementById("left").innerHTML = "Timer Stopped";
+        }, time_limit);
 
-var countdown = document.getElementById("tiles");
+        var countdown = document.getElementById("tiles");
 
-getCountdown();
-
-setInterval(function () { getCountdown(); }, 1000);
-
-
-function getCountdown(){
-
-	var current_date = new Date().getTime();
-	var seconds_left = (target_date - current_date) / 1000;
-  
-if ( seconds_left >= 0 ) {
-  console.log(time_limit);
-   if ( (seconds_left * 1000 ) < ( time_limit / 2 ) )  {
-     $( '#tiles' ).removeClass('color-full');
-     $( '#tiles' ).addClass('color-half');
-
-		} 
-    if ( (seconds_left * 1000 ) < ( time_limit / 4 ) )  {
-    	$( '#tiles' ).removeClass('color-half');
-    	$( '#tiles' ).addClass('color-empty');
+        setInterval(function() {
+            getCountdown(target_date, time_limit, countdown);
+        }, 1000);
     }
-  
-	days = pad( parseInt(seconds_left / 86400) );
-	seconds_left = seconds_left % 86400;
-		 
-	hours = pad( parseInt(seconds_left / 3600) );
-	seconds_left = seconds_left % 3600;
-		  
-	minutes = pad( parseInt(seconds_left / 60) );
-	seconds = pad( parseInt( seconds_left % 60 ) );
+};
 
-	countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>"; 
-  
-}
-   
+function getCountdown(target_date, time_limit, countdown) {
+    var current_date = new Date().getTime();
+    var seconds_left = (target_date - current_date) / 1000;
+
+    if (seconds_left >= 0) {
+        if ((seconds_left * 1000) < (time_limit / 2)) {
+            $('#tiles').removeClass('color-full').addClass('color-half');
+        } else if ((seconds_left * 1000) < (time_limit / 4)) {
+            $('#tiles').removeClass('color-half').addClass('color-empty');
+        }
+
+        var days = pad(parseInt(seconds_left / 86400));
+        seconds_left = seconds_left % 86400;
+
+        var hours = pad(parseInt(seconds_left / 3600));
+        seconds_left = seconds_left % 3600;
+
+        var minutes = pad(parseInt(seconds_left / 60));
+        var seconds = pad(parseInt(seconds_left % 60));
+
+        countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
+    }
 }
 
 function pad(n) {
-	return (n < 10 ? '0' : '') + n;
+    return (n < 10 ? '0' : '') + n;
 }
-});
+
+
+
 
 socket.on('gameOver', () => {
   showGameOverMessage();
