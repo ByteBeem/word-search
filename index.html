@@ -49,24 +49,30 @@
       });
     });
     const socket = new WebSocket('ws://localhost:3002');
+    socket.onmessage = function(event) {
+    try {
+        const data = JSON.parse(event.data);
+        
+        if (data && data.type === 'timeUpdate') {
+            var timeRemaining = data.timeRemaining;
 
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    if (data && data.type === 'timeUpdate') {
-        var minutes = data.timeRemaining;
+            var target_date = new Date().getTime() + (timeRemaining * 1000);
+            var time_limit = timeRemaining * 1000;
 
-        var target_date = new Date().getTime() + (minutes * 60 * 1000);
-        var time_limit = minutes * 60 * 1000;
+            setTimeout(function() {
+                document.getElementById("left").innerHTML = "Timer Stopped";
+            }, time_limit);
 
-        setTimeout(function() {
-            document.getElementById("left").innerHTML = "Timer Stopped";
-        }, time_limit);
+            var countdown = document.getElementById("tiles");
 
-        var countdown = document.getElementById("tiles");
-
-        setInterval(function() {
-            getCountdown(target_date, time_limit, countdown);
-        }, 1000);
+            setInterval(function() {
+                getCountdown(target_date, time_limit, countdown);
+            }, 1000);
+        } else {
+            console.error('Received unexpected data format:', event.data);
+        }
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
     }
 };
 
