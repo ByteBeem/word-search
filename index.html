@@ -55,13 +55,13 @@
     socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
-        console.log(data)
         
         if (data && data.type === 'timeUpdate' ) {
+          
             var minutes = data.timeRemaining.minutes;
             var seconds = data.timeRemaining.seconds;
 
-            displayCountdown(minutes, seconds);
+            countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
         } else {
             console.error('Received unexpected data format:', event.data);
         }
@@ -75,7 +75,7 @@ function displayCountdown(minutes, seconds) {
 
     countdown.innerHTML = formatTime(minutes, seconds);
 
-    // Optionally, handle timer stop logic if needed
+    
 }
 
 function formatTime(minutes, seconds) {
