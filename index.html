@@ -48,28 +48,55 @@
        
       });
     });
-
     const socket = new WebSocket('ws://localhost:3002');
 
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    if (data.type === 'Time') {
+        var minutes = data.Time;
 
-    socket.onmessage = function(event) {
-    try {
-        const data = JSON.parse(event.data);
-        console.log(data);
-        
-        if (data.type === 'timeUpdate' ) {
-            var hours = data.timeRemaining.hours;
-            var minutes = data.timeRemaining.minutes;
-            var seconds = data.timeRemaining.seconds;
+        var target_date = new Date().getTime() + (minutes * 60 * 1000);
+        var time_limit = minutes * 60 * 1000;
 
-            countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
-        } else {
-            console.error('Received unexpected data format:', event.data);
-        }
-    } catch (error) {
-        console.error('Error parsing JSON:', error);
+        setTimeout(function() {
+            document.getElementById("left").innerHTML = "Timer Stopped";
+        }, time_limit);
+
+        var countdown = document.getElementById("tiles");
+
+        setInterval(function() {
+            getCountdown(target_date, time_limit, countdown);
+        }, 1000);
     }
 };
+
+function getCountdown(target_date, time_limit, countdown) {
+    var current_date = new Date().getTime();
+    var seconds_left = (target_date - current_date) / 1000;
+
+    if (seconds_left >= 0) {
+        if ((seconds_left * 1000) < (time_limit / 2)) {
+            $('#tiles').removeClass('color-full').addClass('color-half');
+        } else if ((seconds_left * 1000) < (time_limit / 4)) {
+            $('#tiles').removeClass('color-half').addClass('color-empty');
+        }
+
+        var days = pad(parseInt(seconds_left / 86400));
+        seconds_left = seconds_left % 86400;
+
+        var hours = pad(parseInt(seconds_left / 3600));
+        seconds_left = seconds_left % 3600;
+
+        var minutes = pad(parseInt(seconds_left / 60));
+        var seconds = pad(parseInt(seconds_left % 60));
+
+        countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
+    }
+}
+
+function pad(n) {
+    return (n < 10 ? '0' : '') + n;
+}
 
 
 
