@@ -57,7 +57,7 @@
         const data = JSON.parse(event.data);
         console.log(data);
         
-        if (data.type === 'Time' ) {
+        if (data.type === 'timeUpdate' ) {
           
             var minutes = data.timeRemaining.minutes;
             var seconds = data.timeRemaining.seconds;
