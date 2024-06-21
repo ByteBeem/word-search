@@ -52,21 +52,8 @@
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
-    if (data.type === 'Time') {
-        var minutes = data.Time;
-
-        var target_date = new Date().getTime() + (minutes * 60 * 1000);
-        var time_limit = minutes * 60 * 1000;
-
-        setTimeout(function() {
-            document.getElementById("left").innerHTML = "Timer Stopped";
-        }, time_limit);
-
-        var countdown = document.getElementById("tiles");
-
-        setInterval(function() {
-            getCountdown(target_date, time_limit, countdown);
-        }, 1000);
+    if (data.type === 'timeUpdate') {
+        updateCountdown(data.timeRemaining);
     }
 };
 
@@ -94,10 +81,17 @@ function getCountdown(target_date, time_limit, countdown) {
     }
 }
 
-function pad(n) {
-    return (n < 10 ? '0' : '') + n;
+function updateCountdown(timeRemaining) {
+  const { hours, minutes, seconds } = timeRemaining;
+  const countdownElement = document.getElementById('countdown');
+  if (countdownElement) {
+    countdownElement.innerHTML = `<span>${hours}:</span><span>${minutes}:</span><span>${seconds}</span>`;
+  }
 }
 
+function pad(number) {
+  return number.toString().padStart(2, '0');
+}
 
 
 
