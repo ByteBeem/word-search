@@ -56,7 +56,7 @@
     try {
         const data = JSON.parse(event.data);
         
-        if (data && data.type === 'timeUpdate' ) {
+        if (data.type === 'Time' ) {
           
             var minutes = data.timeRemaining.minutes;
             var seconds = data.timeRemaining.seconds;
@@ -69,24 +69,6 @@
         console.error('Error parsing JSON:', error);
     }
 };
-
-function displayCountdown(minutes, seconds) {
-    var countdown = document.getElementById("tiles");
-
-    countdown.innerHTML = formatTime(minutes, seconds);
-
-    
-}
-
-function formatTime(minutes, seconds) {
-    var formattedMinutes = pad(minutes);
-    var formattedSeconds = pad(seconds);
-    return "<span>" + formattedMinutes + ":</span><span>" + formattedSeconds + "</span>";
-}
-
-function pad(n) {
-    return (n < 10 ? '0' : '') + n;
-}
 
 
 
