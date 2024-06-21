@@ -55,6 +55,7 @@
     socket.onmessage = function(event) {
     try {
         const data = JSON.parse(event.data);
+        console.log(data);
         
         if (data.type === 'Time' ) {
           
