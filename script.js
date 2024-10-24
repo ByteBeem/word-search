@@ -1068,12 +1068,15 @@ function WordList() {
     this.words = new Array();
     
     this.loadWords = function (csvwords) {
+        console.log('csvwords', csvwords);
         var $n = this.words;
-        $(csvwords.split(",")).each(function () {
+        
+        // Iterate over the csvwords array directly
+        $(csvwords).each(function () {
             $n.push(new Word(this));
         });
-        
     }
+    
     
     this.add = function(word) {
         //here's where we reverse the letters randomly
@@ -1188,7 +1191,26 @@ var GameWidgetHelper = {
 
 
 $(document).ready(function() {
-    socket.onmessage= function(event) {
+    // Handle incoming messages from SignalR
+    connection.on("gameData", (data) => {
+     
+       
+        var words = data.words.split(','); ; 
+        
+     
+  
+        // Initialize the word search widget with the received words
+        $("#theGrid").wordsearchwidget({
+            "wordlist": words,
+            "gridsize": 20,
+            "width": 300
+        });
+    });
+});
+
+
+$(document).ready(function() {
+    connection.on= function(event) {
         const data = JSON.parse(event.data);
         if(data.type === "gameData"){
          var words = data.words.split(',');
@@ -1203,3 +1225,4 @@ $(document).ready(function() {
     
 }
   });
+  

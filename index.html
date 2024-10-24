@@ -1,128 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Play929 - Word search</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css"> 
+    <script src="./script.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.js"></script>
+    <title>Play929 
+      | Word
+    </title>
 </head>
 <body>
 
+
+
   <input type="hidden" id="set-time" value="3"/>
-<div id="countdown">
-  
-  <div id='tiles' class="color-full"></div>
-  <div id ="left" class="countdown-label">Time Remaining</div>
-</div>
+  <div id="countdown">
+    <div id='tiles' class="color-full"></div>
+    <div id ="left" class="countdown-label">Time Remaining</div>
+  </div>
 
-<div id="game-over-message">
-  <h1>Game Over</h1>
-  <p>Thanks for playing!</p>
-  <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: red; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Return to Dashboard</a>
+  <div id="game-over-message" style="display: none;">
+    <h1>Game Over</h1>
+    <p>Thanks for playing!</p>
+    <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: red; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Return to Dashboard</a>
+  </div>
 
-</div>
+  <div id="game-win-message" style="display: none;">
+    <h1>Congratulations, you won!</h1>
+    <p>Thanks for playing!</p>
+    <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: green; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Claim Your Winnings</a>
+  </div>
 
-<div id="game-win-message">
-  <h1>Congratulations you won!!</h1>
-  <p>Thanks for playing!</p>
-  <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: green; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Claim Your winnings</a>
+  <div id="theGrid" width="100%" ></div>
 
-</div>
- 
-  <div id="theGrid" width="100%"></div>
-
-  
   <script>
-    $(document).ready(function() {
-      
-      window.addEventListener('beforeunload', function(event) {
-       
-        event.preventDefault();
+   
+  const url = 'https://api.play929.com/gamehub';
+  const testingURl = "http://localhost:5124/gamehub";
+    // Connect to SignalR hub
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${url}`)
+      .build();
 
-        event.returnValue = '';
-      });
-      
-      $.getScript("./script.js", function(data, textStatus, jqxhr) {
-       
-      });
+    connection.start().then(() => {
+      console.log("Connected to SignalR hub");
+    }).catch(err => console.error(err));
+
+    // Handle time update from server
+    connection.on("timeUpdate", (timeRemaining) => {
+      updateCountdown(timeRemaining);
     });
-    const socket = new WebSocket('ws://localhost:3002');
 
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    if (data.type === 'timeUpdate') {
-        updateCountdown(data.timeRemaining);
-    }
-};
+    // Handle game over event
+    connection.on("gameOver", () => {
+      showGameOverMessage();
+    });
 
-function getCountdown(target_date, time_limit, countdown) {
-    var current_date = new Date().getTime();
-    var seconds_left = (target_date - current_date) / 1000;
+    // Handle game win event
+    connection.on("Win", () => {
+      showWinMessage();
+    });
 
-    if (seconds_left >= 0) {
-        if ((seconds_left * 1000) < (time_limit / 2)) {
-            $('#tiles').removeClass('color-full').addClass('color-half');
-        } else if ((seconds_left * 1000) < (time_limit / 4)) {
-            $('#tiles').removeClass('color-half').addClass('color-empty');
-        }
-
-        var days = pad(parseInt(seconds_left / 86400));
-        seconds_left = seconds_left % 86400;
-
-        var hours = pad(parseInt(seconds_left / 3600));
-        seconds_left = seconds_left % 3600;
-
-        var minutes = pad(parseInt(seconds_left / 60));
-        var seconds = pad(parseInt(seconds_left % 60));
-
-        countdown.innerHTML = "<span>" + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
-    }
-}
-
-function updateCountdown(timeRemaining) {
+    function updateCountdown(timeRemaining) {
   const { hours, minutes, seconds } = timeRemaining;
-  const countdownElement = document.getElementById('countdown');
-  if (countdownElement) {
-    countdownElement.innerHTML = `<span>${hours}:</span><span>${minutes}:</span><span>${seconds}</span>`;
+  const tilesElement = document.getElementById('tiles');
+  
+  if (tilesElement) {
+    tilesElement.innerHTML = `<span>${pad(hours)}:</span><span>${pad(minutes)}:</span><span>${pad(seconds)}</span>`;
+    
+    // Change countdown style as time progresses
+    if (hours == 0 && minutes < 2) {
+      $('#tiles').removeClass('color-full').addClass('color-half');
+    }
+    if (minutes == 0 && seconds <= 30) {
+      $('#tiles').removeClass('color-half').addClass('color-empty');
+    }
   }
 }
 
-function pad(number) {
-  return number.toString().padStart(2, '0');
-}
 
+    function pad(number) {
+      return number.toString().padStart(2, '0');
+    }
 
+    function showGameOverMessage() {
+      var gameOverMessage = document.getElementById("game-over-message");
+      var grid = document.getElementById("theGrid");
+      grid.style.display = "none";
+      gameOverMessage.style.display = "block";
+    }
 
-socket.onmessage('gameOver', () => {
-  showGameOverMessage();
-
-    socket.onclose();
-  });
-
- 
-
-  function showGameOverMessage() {
-    var gameOverMessage = document.getElementById("game-over-message");
-    var grid = document.getElementById("theGrid");
-    grid.style.display = "none";
-    gameOverMessage.style.display = "block";
-  }
-
-  socket.onmessage('Win', () => {
-  console.log("Received gameWin event. Showing win message.");
-  showWinMessage();
-  socket.onclose();
-});
-
-  function showWinMessage() {
-    var winMessage = document.getElementById("game-win-message");
-    var grid = document.getElementById("theGrid");
-    grid.style.display = "none";
-    winMessage.style.display = "block";
-  }
-
+    function showWinMessage() {
+      var winMessage = document.getElementById("game-win-message");
+      var grid = document.getElementById("theGrid");
+      grid.style.display = "none";
+      winMessage.style.display = "block";
+    }
   </script>
 </body>
 </html>
