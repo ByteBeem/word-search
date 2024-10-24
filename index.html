@@ -57,7 +57,7 @@
         
         // Connect to SignalR hub
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${testingURl}`)
+            .withUrl(`${url}`)
             .build();
 
         // Show loading overlay while connecting
