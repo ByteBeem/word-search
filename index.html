@@ -57,7 +57,7 @@
         
         // Connect to SignalR hub
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${url}`)
+            .withUrl(`${testingURl}`)
             .build();
 
         // Show loading overlay while connecting
@@ -91,7 +91,7 @@
             const tilesElement = document.getElementById('tiles');
 
             if (tilesElement) {
-                tilesElement.innerHTML = `<span>${pad(hours)}:</span><span>${pad(minutes)}:</span><span>${pad(seconds)}</span>`;
+                tilesElement.innerHTML = `<span>${pad(minutes)}:</span><span>${pad(seconds)}</span>`;
                 
                 // Change countdown style as time progresses
                 if (hours == 0 && minutes < 2) {

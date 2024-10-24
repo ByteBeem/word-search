@@ -1202,7 +1202,7 @@ $(document).ready(function() {
         // Initialize the word search widget with the received words
         $("#theGrid").wordsearchwidget({
             "wordlist": words,
-            "gridsize": 20,
+            "gridsize": 15,
             "width": 300
         });
     });
