@@ -1,104 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css"> 
+    <link rel="stylesheet" href="./style.css">
     <script src="./script.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.js"></script>
-    <title>Play929 
-      | Word
-    </title>
+    <title>Play929 | Word</title>
+    <style>
+        /* Loading overlay styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
+    <input type="hidden" id="set-time" value="3" />
+    <div id="loading-overlay">Loading, please wait...</div> <!-- Loading overlay -->
 
+    <div id="countdown">
+        <div id='tiles' class="color-full"></div>
+        <div id="left" class="countdown-label">Time Remaining</div>
+    </div>
 
+    <div id="game-over-message" style="display: none;">
+        <h1>Game Over</h1>
+        <p>Thanks for playing!</p>
+        <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: red; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Return to Dashboard</a>
+    </div>
 
-  <input type="hidden" id="set-time" value="3"/>
-  <div id="countdown">
-    <div id='tiles' class="color-full"></div>
-    <div id ="left" class="countdown-label">Time Remaining</div>
-  </div>
+    <div id="game-win-message" style="display: none;">
+        <h1>Congratulations, you won!</h1>
+        <p>Thanks for playing!</p>
+        <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: green; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Claim Your Winnings</a>
+    </div>
 
-  <div id="game-over-message" style="display: none;">
-    <h1>Game Over</h1>
-    <p>Thanks for playing!</p>
-    <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: red; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Return to Dashboard</a>
-  </div>
+    <div id="theGrid" width="100%"></div>
 
-  <div id="game-win-message" style="display: none;">
-    <h1>Congratulations, you won!</h1>
-    <p>Thanks for playing!</p>
-    <a href="https://spinz-three.vercel.app/dashboard" class="btn" style="background-color: green; color: white; text-decoration: none; padding: 10px 20px; border-radius: 15px;">Claim Your Winnings</a>
-  </div>
+    <script>
+        const url = 'https://api.play929.com/gamehub';
+        const testingURl = "http://localhost:5124/gamehub";
+        
+        // Connect to SignalR hub
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl(`${url}`)
+            .build();
 
-  <div id="theGrid" width="100%" ></div>
+        // Show loading overlay while connecting
+        $('#loading-overlay').show();
 
-  <script>
-   
-  const url = 'https://api.play929.com/gamehub';
-  const testingURl = "http://localhost:5124/gamehub";
-    // Connect to SignalR hub
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${url}`)
-      .build();
+        connection.start().then(() => {
+            console.log("Connected to SignalR hub");
+            $('#loading-overlay').hide(); // Hide loading overlay on successful connection
+        }).catch(err => {
+            console.error(err);
+            $('#loading-overlay').hide(); // Hide loading overlay even on error
+        });
 
-    connection.start().then(() => {
-      console.log("Connected to SignalR hub");
-    }).catch(err => console.error(err));
+        // Handle time update from server
+        connection.on("timeUpdate", (timeRemaining) => {
+            updateCountdown(timeRemaining);
+        });
 
-    // Handle time update from server
-    connection.on("timeUpdate", (timeRemaining) => {
-      updateCountdown(timeRemaining);
-    });
+        // Handle game over event
+        connection.on("gameOver", () => {
+            showGameOverMessage();
+        });
 
-    // Handle game over event
-    connection.on("gameOver", () => {
-      showGameOverMessage();
-    });
+        // Handle game win event
+        connection.on("Win", () => {
+            showWinMessage();
+        });
 
-    // Handle game win event
-    connection.on("Win", () => {
-      showWinMessage();
-    });
+        function updateCountdown(timeRemaining) {
+            const { hours, minutes, seconds } = timeRemaining;
+            const tilesElement = document.getElementById('tiles');
 
-    function updateCountdown(timeRemaining) {
-  const { hours, minutes, seconds } = timeRemaining;
-  const tilesElement = document.getElementById('tiles');
-  
-  if (tilesElement) {
-    tilesElement.innerHTML = `<span>${pad(hours)}:</span><span>${pad(minutes)}:</span><span>${pad(seconds)}</span>`;
-    
-    // Change countdown style as time progresses
-    if (hours == 0 && minutes < 2) {
-      $('#tiles').removeClass('color-full').addClass('color-half');
-    }
-    if (minutes == 0 && seconds <= 30) {
-      $('#tiles').removeClass('color-half').addClass('color-empty');
-    }
-  }
-}
+            if (tilesElement) {
+                tilesElement.innerHTML = `<span>${pad(hours)}:</span><span>${pad(minutes)}:</span><span>${pad(seconds)}</span>`;
+                
+                // Change countdown style as time progresses
+                if (hours == 0 && minutes < 2) {
+                    $('#tiles').removeClass('color-full').addClass('color-half');
+                }
+                if (minutes == 0 && seconds <= 30) {
+                    $('#tiles').removeClass('color-half').addClass('color-empty');
+                }
+            }
+        }
 
+        function pad(number) {
+            return number.toString().padStart(2, '0');
+        }
 
-    function pad(number) {
-      return number.toString().padStart(2, '0');
-    }
+        function showGameOverMessage() {
+            var gameOverMessage = document.getElementById("game-over-message");
+            var grid = document.getElementById("theGrid");
+            grid.style.display = "none";
+            gameOverMessage.style.display = "block";
+        }
 
-    function showGameOverMessage() {
-      var gameOverMessage = document.getElementById("game-over-message");
-      var grid = document.getElementById("theGrid");
-      grid.style.display = "none";
-      gameOverMessage.style.display = "block";
-    }
-
-    function showWinMessage() {
-      var winMessage = document.getElementById("game-win-message");
-      var grid = document.getElementById("theGrid");
-      grid.style.display = "none";
-      winMessage.style.display = "block";
-    }
-  </script>
+        function showWinMessage() {
+            var winMessage = document.getElementById("game-win-message");
+            var grid = document.getElementById("theGrid");
+            grid.style.display = "none";
+            winMessage.style.display = "block";
+        }
+    </script>
 </body>
 </html>
